@@ -41,3 +41,19 @@
 font-weight:bold;
 
 }
+
+#status {
+background-color: white;
+opacity: .5;
+z-index: 1;
+height: 100px;
+border: 1px solid grey;
+border-radius: 10px;
+}
+
+#status > .wtf {
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+padding-top: 10px;
+}

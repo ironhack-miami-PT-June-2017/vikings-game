@@ -5,6 +5,11 @@
     <title>Viking City</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script type="text/javascript" src="src/viking.js">
+
+    </script>
   </head>
   <body>
     <div class="container-fluid full-page">
@@ -12,14 +17,16 @@
       <div class="row buttons">
         <div class="col-xs-3 col-xs-offset-1">
 
-          <button class="btn btn-danger viking-attack">Attack</button>
+          <button class="btn btn-danger viking-attack"> Viking Attack</button>
 
         </div>
 
-        <div class="col-xs-4"></div> <!-- left empty for spacing -->
+        <div class="col-xs-4" id="status">
+          <p class="wtf">WTF just happened?</p>
+        </div> <!-- left empty for spacing -->
 
           <div class="col-xs-3">
-            <button class="btn btn-danger saxon-attack">Attack</button>
+            <button class="btn btn-danger saxon-attack"> Saxon Attack</button>
 
           </div>
 
@@ -29,7 +36,7 @@
       <div class="row armies">
       <div class="col-xs-3 col-xs-offset-1 theVikings">
         <div class="viking-box 1">
-          <p class="health"><span>HEALTH:</span>100</p>
+          <p class="health"><span>HEALTH:</span> 100</p>
           <img class="viking-pic" src="images/viking1.png" alt="a wild viking appears">
           <p class="strength"><span>STRENGTH:</span>150</p>
         </div>
