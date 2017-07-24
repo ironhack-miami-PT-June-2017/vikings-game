@@ -48,8 +48,9 @@ Viking.prototype.battleCry = function() {
 //------------------------------------------------------
 // SAXON
 //------------------------------------------------------
-function Saxon(healthArg, strengthArg) {
+function Saxon(nameArg, healthArg, strengthArg) {
   Soldier.call(this, healthArg, strengthArg);
+  this.name = nameArg;
 }
 
 Saxon.prototype = Object.create(Soldier.prototype);
@@ -69,6 +70,10 @@ Saxon.prototype.receiveDamage = function(damage) {
 //------------------------------------------------------
 // WAR
 //------------------------------------------------------
+
+var saxonAttacker;
+var vikingAttacker;
+
 function War() {
   this.vikingArmy = [];
   this.saxonArmy = [];
@@ -90,6 +95,9 @@ War.prototype.saxonAttack = function() {
   var saxonIndex = Math.floor(Math.random() * this.saxonArmy.length);
   var theViking = this.vikingArmy[vikingIndex];
   var theSaxon = this.saxonArmy[saxonIndex];
+  saxonAttacker = theSaxon
+
+
 
   var result = theViking.receiveDamage(theSaxon.attack());
 
@@ -100,21 +108,19 @@ War.prototype.saxonAttack = function() {
   return result;
 };
 
-var saxonGraveyard = [];
-var vikingGraveyard = [];
 
 War.prototype.vikingAttack = function() {
-  saxonGraveyard = [];
   var vikingIndex = Math.floor(Math.random() * this.vikingArmy.length);
   var saxonIndex = Math.floor(Math.random() * this.saxonArmy.length);
   var theViking = this.vikingArmy[vikingIndex];
   var theSaxon = this.saxonArmy[saxonIndex];
+  vikingAttacker = theViking
+
 
   var result = theSaxon.receiveDamage(theViking.attack());
 
   if (theSaxon.health <= 0) {
     this.saxonArmy.splice(saxonIndex, 1);
-    saxonGraveyard.push(theSaxon);
   }
 
   return result;
@@ -137,13 +143,13 @@ War.prototype.showStatus = function() {
 var viking1 = new Viking("Ragnar", 10, 20);
 var viking2 = new Viking("Byul", 15, 15);
 var viking3 = new Viking("Locki", 8, 12);
-var viking4 = new Viking("Locki", 18, 25);
-var viking5 = new Viking("Locki", 10, 18);
-var saxon1 = new Saxon(6, 7);
-var saxon2 = new Saxon(16, 15);
-var saxon3 = new Saxon(8, 10);
-var saxon4 = new Saxon(7, 15);
-var saxon5 = new Saxon(12, 15);
+var viking4 = new Viking("Rollo", 18, 25);
+var viking5 = new Viking("Jarl", 10, 18);
+var saxon1 = new Saxon("saxon1", 6, 7);
+var saxon2 = new Saxon("saxon2", 16, 15);
+var saxon3 = new Saxon("saxon3", 8, 10);
+var saxon4 = new Saxon("saxon4", 7, 15);
+var saxon5 = new Saxon("saxon5", 12, 15);
 
 
 var war1 = new War();
@@ -163,60 +169,80 @@ war1.addViking(viking5)
 $(document).ready(function() {
 
   function buryHim(who) {
-    const oldImg = who.first();
+    const health = who.find(".health");
+    const strength = who.find(".strength");
+    const oldImg = who.find("img");
     oldImg.attr("src", "images/tombstone.jpg");
+    health.html("<span>DEAD</span>");
+    strength.html("");
   }
 
   function updateStats() {
-    const spanhtml = "<span>HEALTH:</span>";
+    const spanHealth = "<span>HEALTH:</span>";
+    const spanStrength = "<span>STRENGTH:</span>";
     _.forEach($(".viking-box"), function(el, index) {
-      let indexPlusOne = index + 1;
-      $(".viking-box." + indexPlusOne + " .health").html(spanhtml + war1.vikingArmy[index].health);
-    });
-    _.forEach($(".viking-box"), function(el, index) {
-      let indexPlusOne = index + 1;
-      $(".viking-box." + indexPlusOne + " .strength").html(spanhtml + war1.vikingArmy[index].strength);
-    });
-    _.forEach($(".saxon-box"), function(el, index) {
-      let indexPlusOne = index + 1;
-      if (war1.saxonArmy[index] === undefined) {
-        const deadOne = $(el).find("img");
-        $(el).removeClass("saxon-box");
-        buryHim(deadOne);
-
+      const theSax = $(el);
+      if (war1.vikingArmy[index] === undefined) {
+        $(el).removeClass();
+        buryHim(theSax);
       } else {
-        $(".saxon-box." + indexPlusOne + " .health").html(spanhtml + war1.saxonArmy[index].health);
+        $(".viking-box." + (index + 1) + " .health").html(spanHealth + war1.vikingArmy[index].health);
+        $(".viking-box." + (index + 1) + " .health").parent().addClass(war1.vikingArmy[index].name);
+        setTimeout(function(){ $(el).removeClass("animated shake") }, 1000);
       }
     });
-    // _.forEach($(".saxon-box"), function(el, index) {
-    //   let indexPlusOne = index + 1;
-    //   $(".saxon-box." + indexPlusOne + " .strength").html(spanhtml + war1.saxonArmy[index].strength);
-    // });
+    _.forEach($(".saxon-box"), function(el, index) {
+      const theVik = $(el);
+      if (war1.saxonArmy[index] === undefined) {
+        $(el).removeClass();
+        buryHim(theVik);
+      } else {
+        $(".saxon-box." + (index + 1) + " .health").html(spanHealth + war1.saxonArmy[index].health);
+        $(".saxon-box." + (index + 1) + " .health").parent().addClass(war1.saxonArmy[index].name);
+        setTimeout(function(){ $(el).removeClass("animated shake") }, 1000);
+      }
+    });
+    _.forEach($(".viking-box"), function(el, index) {
+      $(".viking-box." + (index + 1) + " .strength").html(spanStrength + war1.vikingArmy[index].strength);
+    });
+    _.forEach($(".saxon-box"), function(el, index) {
+      $(".saxon-box." + (index + 1) + " .strength").html(spanStrength + war1.saxonArmy[index].strength);
+    });
   };
 
   updateStats();
 
-
   $(".viking-attack").on("click", function(e) {
     e.preventDefault;
     let result = war1.vikingAttack();
-    let vikingArmy = war1.vikingArmy;
-    let saxonArmy = war1.saxonArmy;
-    console.log(e);
     let status = war1.showStatus();
     $("#status").html(status);
     $("#status2").html(result);
-    console.log(saxonGraveyard[0]);
 
+    let attackingViking = vikingAttacker.name;
+    $("." + attackingViking).addClass("animated shake");
 
-    // $(".saxon-box.1").remove();
     updateStats();
+
     if (war1.saxonArmy.length === 0) {
       alert("Vikings win the war!")
     };
-
   });
 
+  $(".saxon-attack").on("click", function(e) {
+    e.preventDefault;
+    let result = war1.saxonAttack();
+    let status = war1.showStatus();
+    $("#status").html(status);
+    $("#status2").html(result);
 
+    let attackingSaxon = saxonAttacker.name;
+    $("." + attackingSaxon).addClass("animated shake");
 
+    updateStats();
+
+    if (war1.vikingArmy.length === 0) {
+      alert("Saxons win the war!")
+    };
+  });
 });
