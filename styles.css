@@ -30,6 +30,11 @@
   margin: 15px;
 }
 
+.dead-solier {
+  display: inline-block;
+  margin: 15px;
+}
+
 .health, .strength{
   color: white;
   margin-left: 5px;
@@ -39,5 +44,31 @@
     -1px 1px 0 #000,
     1px 1px 0 #000;
 font-weight:bold;
+}
 
+.result {
+    position: relative;
+    margin-right: 50px;
+    top: 100px;
+    padding: 5px 5px 5px 5px;
+    border: solid 2px black;
+    width: 400px;
+    height: 50px;
+    color: white;
+    text-shadow: 2px 2px 4px #000000;
+    font-size: 15px;
+}
+
+.status {
+  position: relative;
+  margin-top: 10px;
+  margin-right: 50px;
+  top: 100px;
+  padding: 5px 5px 5px 5px;
+  border: solid 2px black;
+  width: 400px;
+  height: 100px;
+  color: white;
+  text-shadow: 2px 2px 4px #000000;
+  font-size: 15px;
 }
